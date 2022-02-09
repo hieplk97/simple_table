@@ -7,10 +7,11 @@ import { connect } from 'react-redux';
 
 
 const AppCP = (props: AppProps) => {
+
   return (
     <div className="App">
       <Pivot aria-label="Basic Pivot Example">
-        <PivotItem headerText="Tất cả đơn hàng">
+        <PivotItem headerText="Tất cả đơn hàng" >
           <BasicTable />
         </PivotItem>
         <PivotItem headerText="Đơn hàng mới">
