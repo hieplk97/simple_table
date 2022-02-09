@@ -1,4 +1,37 @@
-[
-	{ "code": "Code1", "orderDate": "2021/01/01", "customer": "test", "deliver": 1, "checkout": 2, "cod": 2, "total": "300000", "channel": "web" },
-	{ "code": "Code2", "orderDate": "2022/01/01", "customer": "test", "deliver": 1, "checkout": 2, "cod": 2, "total": "500000", "channel": "web" }
-]
+[{
+  "_id": {
+    "$oid": "6203ded9eb07b4c7b96bd5f0"
+  },
+  "code": "Code1",
+  "orderDate": "2021/01/01",
+  "customer": "test",
+  "deliver": 2,
+  "checkout": 2,
+  "cod": 2,
+  "total": "300000",
+  "channel": "web"
+},{
+  "_id": {
+    "$oid": "6203ded9eb07b4c7b96bd5f1"
+  },
+  "code": "Code2",
+  "orderDate": "2022/01/01",
+  "customer": "test",
+  "deliver": 1,
+  "checkout": 2,
+  "cod": 2,
+  "total": "500000",
+  "channel": "web"
+},{
+  "_id": {
+    "$oid": "6203e563e05549c6f216a5f0"
+  },
+  "code": "Code3",
+  "orderDate": "2021/12/04",
+  "customer": "test3",
+  "deliver": 1,
+  "checkout": 1,
+  "cod": 2,
+  "total": "300000",
+  "channel": "web"
+}]

@@ -23,5 +23,20 @@ export class Routes {
         app.route('/orders')
             // GET endpoint 
             .get(this.orderController.getAllOrders);
+
+        // New order
+        app.route('/orders/getNew')
+            // GET endpoint 
+            .get(this.orderController.getNewOrders);
+
+        // Waiting delivery order
+        app.route('/orders/waitingDeliver')
+            // GET endpoint 
+            .get(this.orderController.getWaitingDeliverOrders);
+
+        // Waiting payment order
+        app.route('/orders/waitingPayment')
+            // GET endpoint 
+            .get(this.orderController.getWaitingPaymentOrders);
     }
 }
