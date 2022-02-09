@@ -1,16 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
-import { IStyleSet, Label, ILabelStyles, Pivot, PivotItem } from '@fluentui/react';
+import { Pivot, PivotItem } from '@fluentui/react';
 import { BasicTable } from './components/table';
 import './App.css';
+import { connect } from 'react-redux';
 
 
-
-const labelStyles: Partial<IStyleSet<ILabelStyles>> = {
-  root: { marginTop: 10 },
-};
-
-function App() {
+const AppCP = (props: AppProps) => {
   return (
     <div className="App">
       <Pivot aria-label="Basic Pivot Example">
@@ -31,4 +27,18 @@ function App() {
   );
 }
 
-export default App;
+export interface AppProps {
+
+}
+
+const mapStateToProps = (state: any) => {
+  return {
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {   
+  };
+};
+
+export const App = connect(mapStateToProps, mapDispatchToProps)(AppCP);

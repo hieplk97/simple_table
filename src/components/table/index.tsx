@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Announced } from '@fluentui/react/lib/Announced';
-import { SearchBox } from '@fluentui/react/lib/SearchBox';
+import { connect } from 'react-redux';
 
+import { SearchBox } from '@fluentui/react/lib/SearchBox';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from '@fluentui/react/lib/DetailsList';
-import { MarqueeSelection } from '@fluentui/react/lib/MarqueeSelection';
-import { Stack, IStackTokens, IStackItemStyles } from '@fluentui/react/lib/Stack';
-import { Dropdown, DropdownMenuItemType, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import { Stack, IStackTokens } from '@fluentui/react/lib/Stack';
+import { Dropdown, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { mergeStyles } from '@fluentui/react/lib/Styling';
+import { IOrderItem } from '../../models/orderItem';
 
 
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
@@ -14,22 +14,6 @@ const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 150 },
 };
-
-const stackItemStyles: IStackItemStyles = {
-    root: {
-      display: 'flex',
-      height: 50,
-      overflow: 'hidden',
-    },
-  };
-  const nonShrinkingStackItemStyles: IStackItemStyles = {
-    root: {
-      display: 'flex',
-      height: 50,
-      overflow: 'hidden',
-      width: 500,
-    },
-  };
 
 const options: IDropdownOption[] = [
     { key: 'code', text: 'Mã' },
@@ -40,121 +24,114 @@ const options: IDropdownOption[] = [
     { key: 'channel', text: 'Kênh' },
 ];
 
-const exampleChildClass = mergeStyles({
-    display: 'inline',
-    marginBottom: '10px',
-});
+const generateIcon = (item:any) => {
+    let deliver = null;
+    switch (item.deliver) {
+        case 1:
+            deliver = <span className="label success">Chưa</span>
+            break;
+        case 2:
+            deliver = <span className="label other">Đã giao</span>
+            break;
+        default:
+            deliver = <span className="label danger">null</span>
+            break;
+    }
 
-export interface IDetailsListBasicExampleItem {
-    key: number;
-    code: any;
-    orderDate: string;
-    customer: string;
-    deliver: any;
-    checkout: any;
-    cod: any;
-    total: string;
-    channel: string;
+    let checkout = null;
+    switch (item.checkout) {
+        case 1:
+            checkout = <span className="label warning">Chờ xử lý</span>
+            break;
+        case 2:
+            checkout = <span className="label other">Đã giao</span>
+            break;
+        default:
+            checkout = <span className="label danger">null</span>
+            break;
+    }
+
+    let cod = null;
+    switch (item.cod) {
+        case 1:
+            cod = <span className="label info">Đã Nhận</span>
+            break;
+        case 2:
+            cod = <span className="label other">Chưa nhận</span>
+            break;
+        default:
+            cod = <span className="label danger">null</span>
+            break;
+    }
+
+    return {deliver: deliver, checkout: checkout, cod: cod}
 }
 
-export interface IDetailsListBasicExampleState {
-    items: IDetailsListBasicExampleItem[];
-    selectionDetails: string;
-}
+const TableCP = (props: ITableProps) => {
+    //const { data } = props;
 
-export class BasicTable extends React.Component<{}, IDetailsListBasicExampleState> {
-    private _selection: Selection;
-    private _allItems: IDetailsListBasicExampleItem[];
-    private _columns: IColumn[];
+    const data = [
+        { code: "Code1", orderDate: "2021/01/01", customer: "test", deliver: 1, checkout: 2, cod: 2, total: "300", channel: "web" },
+        { code: "Code2", orderDate: "2022/01/01", customer: "test1", deliver: 2, checkout: 1, cod: 1, total: "300", channel: "web" }]
 
-    constructor(props: {}) {
-        super(props);
-
-        this._selection = new Selection({
-            onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() }),
+    let rowItems = data.map((item, index) => {
+        const icons = generateIcon(item);
+        return ({
+            key: item.code,
+            code: item.code,
+            orderDate: item.orderDate,
+            customer: item.customer,
+            deliver: icons.deliver,
+            checkout: icons.checkout,
+            cod: icons.cod,
+            total: item.total,
+            channel: item.channel
         });
+    })
 
-        // Populate with items for demos.
-        this._allItems = [
-            {
-                key: 1, code: 'Item ' + 2, orderDate: "2022/02/01", customer: "",
-                deliver: <span className="label other">Đã giao</span>,
-                checkout: <span className="label other">Đã thanh toán</span>,
-                cod: <span className="label other">Chưa nhận</span>, total: "300.000 đ", channel: "web"
-            }
-        ];
+    const columns = [
+        { key: 'column1', name: 'Mã', fieldName: 'code', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column2', name: 'Ngày đặt', fieldName: 'orderDate', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column3', name: 'Khách hàng', fieldName: 'customer', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column4', name: 'Giao hàng', fieldName: 'deliver', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column5', name: 'Thanh toán', fieldName: 'checkout', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column6', name: 'COD', fieldName: 'cod', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column7', name: 'Tổng tiền', fieldName: 'total', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column8', name: 'Kênh', fieldName: 'channel', minWidth: 100, maxWidth: 200, isResizable: true },
+    ];
 
+    return (
+        <div>
+            <Stack horizontal tokens={stackTokens}>
+                <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles} />
+                <SearchBox placeholder="Search" style={{ width: 500 }} onSearch={newValue => console.log('value is ' + newValue)} />
 
-        this._columns = [
-            { key: 'column1', name: 'Mã', fieldName: 'code', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column2', name: 'Ngày đặt', fieldName: 'orderDate', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column3', name: 'Khách hàng', fieldName: 'customer', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column4', name: 'Giao hàng', fieldName: 'deliver', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column5', name: 'Thanh toán', fieldName: 'checkout', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column6', name: 'COD', fieldName: 'cod', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column6', name: 'Tổng tiền', fieldName: 'total', minWidth: 100, maxWidth: 200, isResizable: true },
-            { key: 'column6', name: 'Kênh', fieldName: 'channel', minWidth: 100, maxWidth: 200, isResizable: true },
-        ];
-
-        this.state = {
-            items: this._allItems,
-            selectionDetails: this._getSelectionDetails(),
-        };
-    }
-
-    public render(): JSX.Element {
-        const { items, selectionDetails } = this.state;
-
-        return (
-            <div>
-                <div className={exampleChildClass}>{selectionDetails}</div>
-
-                <Announced message={selectionDetails} />
-                <Stack horizontal tokens={stackTokens}>
-                        <Dropdown placeholder="Điều kiện lọc" options={options}styles={dropdownStyles}/>
-                    <SearchBox placeholder="Search" style={{width:1300}} onSearch={newValue => console.log('value is ' + newValue)} />
-
-                </Stack>
-
-                <Announced message={`Number of items after filter applied: ${items.length}.`} />
-                <MarqueeSelection selection={this._selection}>
-                    <DetailsList
-                        items={items}
-                        columns={this._columns}
-                        setKey="set"
-                        layoutMode={DetailsListLayoutMode.justified}
-                        selection={this._selection}
-                        selectionPreservedOnEmptyClick={true}
-                        ariaLabelForSelectionColumn="Toggle selection"
-                        ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-                        checkButtonAriaLabel="select row"
-                        onItemInvoked={this._onItemInvoked}
-                    />
-                </MarqueeSelection>
-            </div>
-        );
-    }
-
-    private _getSelectionDetails(): string {
-        const selectionCount = this._selection.getSelectedCount();
-
-        switch (selectionCount) {
-            case 0:
-                return 'No items selected';
-            case 1:
-                return '1 item selected: ' + (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).code;
-            default:
-                return `${selectionCount} items selected`;
-        }
-    }
-
-    private _onFilter = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
-        this.setState({
-            items: text ? this._allItems.filter(i => i.code.toLowerCase().indexOf(text) > -1) : this._allItems,
-        });
-    };
-
-    private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-        alert(`Item invoked: ${item.code}`);
-    };
+            </Stack>
+            <DetailsList
+                items={rowItems}
+                columns={columns}
+                key="set"
+                layoutMode={DetailsListLayoutMode.fixedColumns}
+                selectionMode={0}
+            />
+        </div>
+    );
 }
+/*********************************************** */
+//       Define property of components            /
+/*********************************************** */
+interface ITableProps {
+    data: IOrderItem[],
+};
+const mapStateToProps = (state: any) => {
+    return {
+        data: [],
+    };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+    };
+};
+
+export const BasicTable = connect(mapStateToProps, mapDispatchToProps)(TableCP);

@@ -1,0 +1,4 @@
+export const SET_DATA_ORDER_ITEMS = "SET_DATA_ORDER_ITEMS";
+//Message
+export const SET_MESSAGE = "SET_MESSAGE";
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
