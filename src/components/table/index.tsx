@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
 import { setIconOptions } from '@fluentui/react/lib/Styling';
 
-import { TextField, ITextFieldStyles } from '@fluentui/react/lib/TextField';
+import { TextField } from '@fluentui/react/lib/TextField';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from '@fluentui/react/lib/DetailsList';
-import { Stack, IStackTokens } from '@fluentui/react/lib/Stack';
 import { Dropdown, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { IOrderItem } from '../../models/orderItem';
 import { useEffect, useState } from 'react';
 
-const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 150 },
@@ -70,52 +68,58 @@ const generateIcon = (item: any) => {
     return { deliver: deliver, checkout: checkout, cod: cod }
 }
 
+const generateTable = (items: any[]) => {
+    let rowItems = items.map((item, index) => {
+        const icons = generateIcon(item);
+        return ({
+            key: item.code,
+            code: item.code,
+            orderDate: item.orderDate,
+            customer: item.customer,
+            deliver: icons.deliver,
+            checkout: icons.checkout,
+            cod: icons.cod,
+            total: item.total,
+            channel: item.channel
+        });
+    });
+
+    return rowItems;
+}
+
 const TableCP = (props: ITableProps) => {
     const { data } = props;
     const [filter, setFilter] = useState<any>();
     const [items, setItems] = useState<any[]>([]);
-    
+
 
     const onFilter = (text: string): void => {
         let searchResult = data;
-        switch (filter.key) {
-            case 'code':
-                searchResult = data.filter((item) => item.code.toLowerCase().includes(text.toLowerCase()));
-                break;
-            case 'orderDate':
-                searchResult = data.filter((item) => item.orderDate.toLowerCase().includes(text.toLowerCase()));
-                break;
-            case 'customer':
-                searchResult = data.filter((item) => item.customer.toLowerCase().includes(text.toLowerCase()));
-                break;
-            case 'total':
-                searchResult = data.filter((item) => item.total.toLowerCase().includes(text.toLowerCase()));
-                break;
-            case 'channel':
-                searchResult = data.filter((item) => item.channel.toLowerCase().includes(text.toLowerCase()));
-                break;
-            default:
-                break;
+        if (filter) {
+            switch (filter.key) {
+                case 'code':
+                    searchResult = data.filter((item) => item.code.toLowerCase().includes(text.toLowerCase()));
+                    break;
+                case 'orderDate':
+                    searchResult = data.filter((item) => item.orderDate.toLowerCase().includes(text.toLowerCase()));
+                    break;
+                case 'customer':
+                    searchResult = data.filter((item) => item.customer.toLowerCase().includes(text.toLowerCase()));
+                    break;
+                case 'total':
+                    searchResult = data.filter((item) => item.total.toLowerCase().includes(text.toLowerCase()));
+                    break;
+                case 'channel':
+                    searchResult = data.filter((item) => item.channel.toLowerCase().includes(text.toLowerCase()));
+                    break;
+            }
         }
-
-        setItems(searchResult);
+        const rowItems = generateTable(searchResult);
+        setItems(rowItems);
     };
 
     useEffect(() => {
-        let rowItems = data.map((item, index) => {
-            const icons = generateIcon(item);
-            return ({
-                key: item.code,
-                code: item.code,
-                orderDate: item.orderDate,
-                customer: item.customer,
-                deliver: icons.deliver,
-                checkout: icons.checkout,
-                cod: icons.cod,
-                total: item.total,
-                channel: item.channel
-            });
-        });
+        const rowItems = generateTable(data);
         setItems(rowItems);
     }, [data]);
 
@@ -132,18 +136,17 @@ const TableCP = (props: ITableProps) => {
 
     return (
         <div>
-            <Stack horizontal tokens={stackTokens}>
+            <div className='wrapper'>
                 <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles}
-                onChange={(event, selectedOption) => setFilter(selectedOption)} />
-                <TextField onChange={(event) => onFilter(event.currentTarget.value)}
-                />
-            </Stack>
+                    onChange={(event, selectedOption) => setFilter(selectedOption)} />
+                <TextField onChange={(event) => onFilter(event.currentTarget.value)} />
+            </div>
+
             <DetailsList
                 items={items}
                 columns={columns}
                 key="set"
                 layoutMode={DetailsListLayoutMode.fixedColumns}
-                selectionMode={0}
             />
         </div>
     );

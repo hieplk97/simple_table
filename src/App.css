@@ -37,6 +37,16 @@
   }
 }
 
+.wrapper {
+  display: inline-flex;
+  width: 100%;
+  /*no difference to display:flex; */
+}
+
+.ms-TextField.root-136 {
+  width: inherit;
+}
+
 .label {
   color: white;
   padding: 8px;

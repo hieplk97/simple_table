@@ -1,5 +1,3 @@
-import React from 'react';
-import logo from './logo.svg';
 import { Pivot, PivotItem } from '@fluentui/react';
 import { BasicTable } from './components/table';
 import './App.css';
