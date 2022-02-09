@@ -1,10 +1,10 @@
 export interface IOrderItem {
-    code: any;
+    code: string;
     orderDate: string;
     customer: string;
-    deliver: any;
-    checkout: any;
-    cod: any;
+    deliver: number;
+    checkout: number;
+    cod: number;
     total: string;
     channel: string;
 }

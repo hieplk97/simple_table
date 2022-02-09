@@ -1,0 +1,4 @@
+[
+	{ "code": "Code1", "orderDate": "2021/01/01", "customer": "test", "deliver": 1, "checkout": 2, "cod": 2, "total": "300000", "channel": "web" },
+	{ "code": "Code2", "orderDate": "2022/01/01", "customer": "test", "deliver": 1, "checkout": 2, "cod": 2, "total": "500000", "channel": "web" }
+]
