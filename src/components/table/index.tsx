@@ -1,13 +1,12 @@
-import * as React from 'react';
 import { connect } from 'react-redux';
+import { setIconOptions } from '@fluentui/react/lib/Styling';
 
-import { SearchBox } from '@fluentui/react/lib/SearchBox';
+import { TextField, ITextFieldStyles } from '@fluentui/react/lib/TextField';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from '@fluentui/react/lib/DetailsList';
 import { Stack, IStackTokens } from '@fluentui/react/lib/Stack';
 import { Dropdown, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
-import { mergeStyles } from '@fluentui/react/lib/Styling';
 import { IOrderItem } from '../../models/orderItem';
-
+import { useEffect, useState } from 'react';
 
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 
@@ -15,16 +14,20 @@ const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 150 },
 };
 
+// Suppress icon warnings.
+setIconOptions({
+    disableWarnings: true
+});
+
 const options: IDropdownOption[] = [
     { key: 'code', text: 'Mã' },
     { key: 'orderDate', text: 'Ngày đặt' },
     { key: 'customer', text: 'Khách hàng' },
-    { key: 'COD', text: 'COD' },
     { key: 'total', text: 'Tổng tiền' },
     { key: 'channel', text: 'Kênh' },
 ];
 
-const generateIcon = (item:any) => {
+const generateIcon = (item: any) => {
     let deliver = null;
     switch (item.deliver) {
         case 1:
@@ -64,30 +67,57 @@ const generateIcon = (item:any) => {
             break;
     }
 
-    return {deliver: deliver, checkout: checkout, cod: cod}
+    return { deliver: deliver, checkout: checkout, cod: cod }
 }
 
 const TableCP = (props: ITableProps) => {
-    //const { data } = props;
+    const { data } = props;
+    const [filter, setFilter] = useState<any>();
+    const [items, setItems] = useState<any[]>([]);
+    
 
-    const data = [
-        { code: "Code1", orderDate: "2021/01/01", customer: "test", deliver: 1, checkout: 2, cod: 2, total: "300", channel: "web" },
-        { code: "Code2", orderDate: "2022/01/01", customer: "test1", deliver: 2, checkout: 1, cod: 1, total: "300", channel: "web" }]
+    const onFilter = (text: string): void => {
+        let searchResult = data;
+        switch (filter.key) {
+            case 'code':
+                searchResult = data.filter((item) => item.code.toLowerCase().includes(text.toLowerCase()));
+                break;
+            case 'orderDate':
+                searchResult = data.filter((item) => item.orderDate.toLowerCase().includes(text.toLowerCase()));
+                break;
+            case 'customer':
+                searchResult = data.filter((item) => item.customer.toLowerCase().includes(text.toLowerCase()));
+                break;
+            case 'total':
+                searchResult = data.filter((item) => item.total.toLowerCase().includes(text.toLowerCase()));
+                break;
+            case 'channel':
+                searchResult = data.filter((item) => item.channel.toLowerCase().includes(text.toLowerCase()));
+                break;
+            default:
+                break;
+        }
 
-    let rowItems = data.map((item, index) => {
-        const icons = generateIcon(item);
-        return ({
-            key: item.code,
-            code: item.code,
-            orderDate: item.orderDate,
-            customer: item.customer,
-            deliver: icons.deliver,
-            checkout: icons.checkout,
-            cod: icons.cod,
-            total: item.total,
-            channel: item.channel
+        setItems(searchResult);
+    };
+
+    useEffect(() => {
+        let rowItems = data.map((item, index) => {
+            const icons = generateIcon(item);
+            return ({
+                key: item.code,
+                code: item.code,
+                orderDate: item.orderDate,
+                customer: item.customer,
+                deliver: icons.deliver,
+                checkout: icons.checkout,
+                cod: icons.cod,
+                total: item.total,
+                channel: item.channel
+            });
         });
-    })
+        setItems(rowItems);
+    }, [data]);
 
     const columns = [
         { key: 'column1', name: 'Mã', fieldName: 'code', minWidth: 100, maxWidth: 200, isResizable: true },
@@ -103,12 +133,13 @@ const TableCP = (props: ITableProps) => {
     return (
         <div>
             <Stack horizontal tokens={stackTokens}>
-                <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles} />
-                <SearchBox placeholder="Search" style={{ width: 500 }} onSearch={newValue => console.log('value is ' + newValue)} />
-
+                <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles}
+                onChange={(event, selectedOption) => setFilter(selectedOption)} />
+                <TextField onChange={(event) => onFilter(event.currentTarget.value)}
+                />
             </Stack>
             <DetailsList
-                items={rowItems}
+                items={items}
                 columns={columns}
                 key="set"
                 layoutMode={DetailsListLayoutMode.fixedColumns}
@@ -125,7 +156,7 @@ interface ITableProps {
 };
 const mapStateToProps = (state: any) => {
     return {
-        data: [],
+        data: state.st.dataOrderItems,
     };
 };
 
