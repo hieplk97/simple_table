@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { setIconOptions } from '@fluentui/react/lib/Styling';
 
-import { TextField } from '@fluentui/react/lib/TextField';
-import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from '@fluentui/react/lib/DetailsList';
+import { TextField, ITextFieldStyles  } from '@fluentui/react/lib/TextField';
+import { DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsList';
 import { Dropdown, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { IOrderItem } from '../../models/orderItem';
 import { useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 150 },
 };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: {width: 'inherit'}, icon: {}};
 
 // Suppress icon warnings.
 setIconOptions({
@@ -79,7 +80,10 @@ const generateTable = (items: any[]) => {
             deliver: icons.deliver,
             checkout: icons.checkout,
             cod: icons.cod,
-            total: item.total,
+            total: (item.total).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+              }),
             channel: item.channel
         });
     });
@@ -124,14 +128,14 @@ const TableCP = (props: ITableProps) => {
     }, [data]);
 
     const columns = [
-        { key: 'column1', name: 'Mã', fieldName: 'code', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column2', name: 'Ngày đặt', fieldName: 'orderDate', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column3', name: 'Khách hàng', fieldName: 'customer', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column4', name: 'Giao hàng', fieldName: 'deliver', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column5', name: 'Thanh toán', fieldName: 'checkout', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column6', name: 'COD', fieldName: 'cod', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column7', name: 'Tổng tiền', fieldName: 'total', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column8', name: 'Kênh', fieldName: 'channel', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column1', name: 'Mã', fieldName: 'code', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column2', name: 'Ngày đặt', fieldName: 'orderDate', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column3', name: 'Khách hàng', fieldName: 'customer', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column4', name: 'Giao hàng', fieldName: 'deliver', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column5', name: 'Thanh toán', fieldName: 'checkout', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column6', name: 'COD', fieldName: 'cod', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column7', name: 'Tổng tiền', fieldName: 'total', minWidth: 100, maxWidth: 150, isResizable: true },
+        { key: 'column8', name: 'Kênh', fieldName: 'channel', minWidth: 100, maxWidth: 150, isResizable: true },
     ];
 
     return (
@@ -139,14 +143,14 @@ const TableCP = (props: ITableProps) => {
             <div className='wrapper'>
                 <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles}
                     onChange={(event, selectedOption) => setFilter(selectedOption)} />
-                <TextField onChange={(event) => onFilter(event.currentTarget.value)} />
+                <TextField styles={textFieldStyles} onChange={(event) => onFilter(event.currentTarget.value)} />
             </div>
 
             <DetailsList
                 items={items}
                 columns={columns}
                 key="set"
-                layoutMode={DetailsListLayoutMode.fixedColumns}
+                layoutMode={DetailsListLayoutMode.justified}
             />
         </div>
     );

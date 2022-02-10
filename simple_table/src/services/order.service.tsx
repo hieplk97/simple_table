@@ -2,7 +2,7 @@ import axios from "axios";
 import * as Types from '../commons/Types';
 
 const getOrders = async (dispatch: any, url: string) => {
-    url = url == undefined ? "": url;
+    url = url === undefined ? "": url;
 
     const instance = axios.create({
         headers: {

@@ -19,10 +19,10 @@ export const OrderSchema = new Schema({
         type: Number            
     },
     cod: {
-        type: String            
+        type: Number            
     },
     total: {
-        type: String            
+        type: Number            
     },
     channel: {
         type: String            
