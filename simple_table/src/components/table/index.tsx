@@ -146,7 +146,8 @@ const TableCP = (props: ITableProps) => {
             <div className='wrapper'>
                 <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles}
                     onChange={(event, selectedOption) => setFilter(selectedOption)} />
-                <TextField styles={textFieldStyles} onChange={(event) => onFilter(event.currentTarget.value)} iconProps={filterIcon} />
+                <TextField styles={textFieldStyles} iconProps={filterIcon} placeholder="Tìm Kiếm"
+                onChange={(event) => onFilter(event.currentTarget.value)} />
             </div>
 
             <DetailsList
