@@ -8,7 +8,7 @@
   "deliver": 2,
   "checkout": 2,
   "cod": 2,
-  "total": "300000",
+  "total": 300000,
   "channel": "web"
 },{
   "_id": {
@@ -20,7 +20,7 @@
   "deliver": 1,
   "checkout": 2,
   "cod": 2,
-  "total": "500000",
+  "total": 500000,
   "channel": "web"
 },{
   "_id": {
@@ -32,6 +32,6 @@
   "deliver": 1,
   "checkout": 1,
   "cod": 2,
-  "total": "300000",
+  "total": 300000,
   "channel": "web"
 }]
