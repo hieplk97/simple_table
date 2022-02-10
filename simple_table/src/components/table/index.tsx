@@ -6,12 +6,15 @@ import { DetailsList, DetailsListLayoutMode } from '@fluentui/react/lib/DetailsL
 import { Dropdown, IDropdownStyles, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { IOrderItem } from '../../models/orderItem';
 import { useEffect, useState } from 'react';
+import { IIconProps } from '@fluentui/react/lib/Icon';
 
+
+const filterIcon: IIconProps = { iconName: 'Search' };
 
 const dropdownStyles: Partial<IDropdownStyles> = {
     dropdown: { width: 150 },
 };
-const textFieldStyles: Partial<ITextFieldStyles> = { root: {width: 'inherit'}, icon: {}};
+const textFieldStyles: Partial<ITextFieldStyles> = { root: {width: 'inherit'}};
 
 // Suppress icon warnings.
 setIconOptions({
@@ -143,7 +146,7 @@ const TableCP = (props: ITableProps) => {
             <div className='wrapper'>
                 <Dropdown placeholder="Điều kiện lọc" options={options} styles={dropdownStyles}
                     onChange={(event, selectedOption) => setFilter(selectedOption)} />
-                <TextField styles={textFieldStyles} onChange={(event) => onFilter(event.currentTarget.value)} />
+                <TextField styles={textFieldStyles} onChange={(event) => onFilter(event.currentTarget.value)} iconProps={filterIcon} />
             </div>
 
             <DetailsList
