@@ -9,10 +9,10 @@ Folder:
 Data: api/data.json 
 
 Deployment:
-- front-end: open command line in "simple_table" folder and run these command: deploy as localhost:3000
+- front-end: open command line in "simple_table" folder and run these command: deploy at localhost:3000
 	+ npm install
 	+ npm start
-- back-end: open command line in "api" folder and run these command: deploy as localhost:3001
+- back-end: open command line in "api" folder and run these command: deploy at localhost:3001
 	+ npm install tsc -g
 	+ npm install
 	+ npm run dev
