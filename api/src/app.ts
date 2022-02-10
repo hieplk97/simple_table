@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as mongoose from "mongoose";
+const cors = require("cors");
 
 import { Routes } from "./routes/crmRoutes";
 
@@ -25,6 +26,8 @@ class App {
 
     private config(): void{
         // Giúp chúng ta tiếp nhận dữ liệu từ body của request
+        this.app.use(cors({credentials: true, origin: true}))
+        this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
     }
 
