@@ -10,10 +10,10 @@ Data: api/data.json
 
 Deployment:
 - front-end: open command line in "simple_table" folder and run these command:
-	npm install
-	npm start
+	+ npm install
+	+ npm start
 - back-end: open command line in "api" folder and run these command:
-	npm install tsc -g
-	npm install
-	npm run dev
+	+ npm install tsc -g
+	+ npm install
+	+ npm run dev
 	
